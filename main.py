@@ -8,7 +8,7 @@ from src.utils import signalAnalyzer as sa
 #======================================================================================#
 # hyperparameters
 dataset = "barabasi"
-sampling_mode = "nnz"
+sampling_mode = "uniform"
 samples = 200
 num_nodes = 1000
 p = 0.01

@@ -62,6 +62,7 @@ def plot_FR(FR, SQ, dataset, sampling_mode, name="FR_visualize"):
 	plt.plot(range(len(FR)), FR)
 	plt.xlabel("Nodes")
 	plt.ylabel("frequency response")
-	plt.title(title_corrector(dataset)+"- "+"smoothness quotient:"+str(SQ))
+	plt.title(title_corrector(dataset)+"- "+"smoothness quotient: "+\
+		           str(float("{:.3f}".format(SQ))))
 	plt.savefig(total_path)
 	return None
