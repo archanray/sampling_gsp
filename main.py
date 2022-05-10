@@ -12,10 +12,10 @@ from tqdm import tqdm
 dataset = "grid"
 # options for the following line
 #"nnz", "uniform" 
-sampling_mode = "nnz"
+sampling_mode = "uniform"
 # options for the following line
 #"smoothed gaussian", "uniform" 
-signal_distro = "uniform" 
+signal_distro = "smoothed gaussian" 
 min_samples = 10
 max_samples = 500
 steps = 10
