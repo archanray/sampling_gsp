@@ -48,16 +48,18 @@ def add_gaussian_signal(A, mode="laplacian", pow_=-1):
     if mode == "true":
         f = gaussian_vector
     if mode == "laplacian":
-        f = (np.linalg.matrix_power(\
-                (np.diag(np.sum(A, axis=1)) - A), \
-                    pow_\
-                ) @ \
-                np.expand_dims(gaussian_vector, axis=1)\
-            )
+        # f = (np.linalg.matrix_power(\
+        #         (np.diag(np.sum(A, axis=1)) - A), \
+        #             pow_\
+        #         ) @ \
+        #         np.expand_dims(gaussian_vector, axis=1)\
+        #     )
+        f = ((np.diag(np.sum(A, axis=1)) - A)**pow_) @ \
+                    np.expand_dims(gaussian_vector, axis=1)
     # change this to add 2D gaussian signal and not a 1D gaussian signal
     return f.squeeze()
 
-def get_data(name="erdos", size=10, p=0.2, signal="smoothed gaussian", pow_=-1):
+def get_data(name="erdos", size=10, p=0.2, signal="smoothed gaussian", pow_=-0.5):
     if name == "arxiv" or name == "facebook" or name == "erdos" or name == "barabasi" or name == "grid":
         """
         dataset arxiv: https://snap.stanford.edu/data/ca-CondMat.html

@@ -11,7 +11,7 @@ from src.utils import signalAnalyzer as sa
 dataset = "grid"
 sampling_mode = "uniform"
 samples = 200
-num_nodes = 400
+num_nodes = 40
 p = 0.01
 
 #======================================================================================#
@@ -24,7 +24,8 @@ sg(data_matrix, node_signals, dataset, sampling_mode, name="ogGraph_visualize", 
 # get the frequency response
 SQ, FR = sa(node_signals, data_matrix)
 # plot frequency response
-pf(np.sort(FR), SQ, dataset, sampling_mode, name="ogFR_visualize")
+# pf(np.sort(FR), SQ, dataset, sampling_mode, name="ogFR_visualize")
+pf(FR, SQ, dataset, sampling_mode, name="ogFR_visualize")
 eigvals = np.real(np.linalg.eigvalsh(data_matrix))
 pfe(FR, eigvals, SQ, dataset, sampling_mode, name="ogFRE_visualize")
 
@@ -38,6 +39,7 @@ sg(sampled_adjacency, sampled_signals, dataset, sampling_mode, \
 # get the frequency response
 SQ, FR = sa(sampled_signals, sampled_adjacency)
 # plot frequency response
-pf(np.sort(FR), SQ, dataset, sampling_mode, name="sampledFR_visualize")
+# pf(np.sort(FR), SQ, dataset, sampling_mode, name="sampledFR_visualize")
+pf(FR, SQ, dataset, sampling_mode, name="sampledFR_visualize")
 eigvals = np.real(np.linalg.eigvalsh(sampled_adjacency))
 pfe(FR, eigvals, SQ, dataset, sampling_mode, name="sampledFRE_visualize")
