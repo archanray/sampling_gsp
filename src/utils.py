@@ -35,3 +35,5 @@ def signalAnalyzer(f, M):
 
 	return smoothnessQuotient, frequencyResponse
 
+def AdjacencyFromLinearArray(edgeWgt, num_nodes)
+
