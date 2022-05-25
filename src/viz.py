@@ -11,6 +11,8 @@ def title_corrector(dataset):
 		corrected_title = "Barabasi-Albert Graph"
 	if dataset == "grid":
 		corrected_title = "Grid Graph"
+	if dataset == "optimal":
+		corrected_title = "Optimal Graph"
 	return corrected_title
 
 def generateGraph(A, signals):
