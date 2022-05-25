@@ -12,8 +12,9 @@ def laplacian(adjacencyMat):
     generates a graph Laplacian
     """ 
     L = np.diag(np.sum(adjacencyMat, axis=1)) - adjacencyMat
+    L = L / np.linalg.norm(L) #max(np.linalg.norm(L),1)
     # add noise to the diagonal to ensure PSD
-    L = L + np.diag(1e-14*np.ones(len(L)))
+    # L = L + np.diag(1e-14*np.ones(len(L)))
     return L
 
 def matSqrt(M):
@@ -25,17 +26,20 @@ def matSqrt(M):
     sqrt_M = v @ np.diag(np.sqrt(e)) @ np.linalg.inv(v)
     return sqrt_M
 
-def signalAnalyzer(f, M):
+def signalAnalyzer(f, M, FR=False):
     """
     compute soothness quotient
     """
     L = laplacian(M)
     f = np.expand_dims(f, axis=1)
-    smoothnessQuotient = (f.T @ L @ f / (f.T @ f)).squeeze()
-    frequencyResponse = np.real(f.T @ sqrtm(L)).squeeze()
-    # frequencyResponse = np.real(f.T @ matSqrt(L)).squeeze()
+    smoothnessQuotient = (f.T @ L @ f / (np.linalg.norm(f)**2)).squeeze()
+    if FR:
+        frequencyResponse = np.real(f.T @ sqrtm(L)).squeeze()
+        # frequencyResponse = np.real(f.T @ matSqrt(L)).squeeze()
 
-    return smoothnessQuotient, frequencyResponse
+        return smoothnessQuotient, frequencyResponse
+    else:
+        return smoothnessQuotient
 
 def AdjacencyFromLinearArray(edgeWgt, num_nodes):
     A = np.ones((num_nodes, num_nodes))
