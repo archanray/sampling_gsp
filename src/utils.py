@@ -7,12 +7,19 @@ from tqdm import tqdm
 def is_psd(x):
     return np.all(np.linalg.eigvals(x) > 0)
 
+
+def get_triu_entries(M):
+    B = np.ones_like(M)
+    B = np.triu(B,1)
+    q = M[B==1]
+    return q
+
 def laplacian(adjacencyMat):
     """
     generates a graph Laplacian
     """ 
     L = np.diag(np.sum(adjacencyMat, axis=1)) - adjacencyMat
-    L = L / np.linalg.norm(L) #max(np.linalg.norm(L),1)
+    # L = L / np.linalg.norm(L) #max(np.linalg.norm(L),1)
     # add noise to the diagonal to ensure PSD
     # L = L + np.diag(1e-14*np.ones(len(L)))
     return L
@@ -55,6 +62,10 @@ def constructLaplacian(A):
     return L
 
 def scipyMatMul(x,y):
+    if len(x.shape) == 1:
+        x = np.expand_dims(x, axis=1)
+    if len(y.shape) == 1:
+        y = np.expand_dims(y, axis=1)
     from scipy.spatial.distance import cdist
     dists = cdist(x,y, metric="euclidean")
     return dists*dists
@@ -111,3 +122,61 @@ def gradientDescentS(edgeWgt, Z, S, alpha, \
             LR *= LR_decay
 
     return edgeWgt
+
+
+def multivariate_gaussian(pos, mu, Sigma):
+    """Return the multivariate Gaussian distribution on array pos."""
+
+    n = mu.shape[0]
+    Sigma_det = np.linalg.det(Sigma)
+    Sigma_inv = np.linalg.inv(Sigma)
+    N = np.sqrt((2*np.pi)**n * Sigma_det)
+    # This einsum call calculates (x-mu)T.Sigma-1.(x-mu) in a vectorized
+    # way across all the input variables.
+    fac = np.einsum('...k,kl,...l->...', pos-mu, Sigma_inv, pos-mu)
+
+    return np.exp(-fac / 2) / N
+
+
+def sample_positions(N, mu, sigma):
+    X = np.linspace(-3, 3, N)
+    Y = np.linspace(-3, 4, N)
+    # sample the points
+    X, Y = np.meshgrid(X, Y)
+
+    
+    # Pack X and Y into a single 3-dimensional array
+    pos = np.empty(X.shape + (2,))
+    pos[:, :, 0] = X
+    pos[:, :, 1] = Y
+
+    return pos
+
+
+def generate_2D_gaussian(nodes, mu, sigma, dataset):
+    if int(np.sqrt(nodes)) - np.sqrt(nodes) != 0:
+        raise Exception("number of nodes should be a square of an integer")
+
+    N = int(np.sqrt(nodes))
+    # get the parameters
+    # mu = np.array([0., 1.])
+    # sigma = np.array([[ 1. , 0], [0,  1.]])
+    mu = np.array(mu)
+    sigma = np.array(sigma)
+
+    # get the positions
+    pos = sample_positions(N, mu, sigma)
+
+    # get the signals
+    signals = multivariate_gaussian(pos, mu, sigma)
+
+    import matplotlib.pyplot as plt
+    fig = plt.figure()
+    ax = plt.axes(projection='3d')
+    ax.plot_surface(pos[:,:,0], pos[:,:,1], signals, rstride=1, cstride=1,
+                    cmap='viridis', edgecolor='none')
+    directory = "figures/"+dataset
+    plt.savefig(directory+"/signal_bi_gaussian.pdf")
+
+    # row wise flatten and return
+    return signals.flatten()
