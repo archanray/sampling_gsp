@@ -21,7 +21,7 @@ os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 def computeSmoothness(y, L):
 	return np.squeeze((y.T @ L @ y) / np.linalg.norm(y)**2)
 
-signal_distro = "bi_gaussian"
+signal_distro = "uniform"
 dataset = "grid"
 # set up torch device
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
