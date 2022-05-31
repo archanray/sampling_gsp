@@ -19,7 +19,7 @@ def laplacian(adjacencyMat):
     generates a graph Laplacian
     """ 
     L = np.diag(np.sum(adjacencyMat, axis=1)) - adjacencyMat
-    # L = L / np.linalg.norm(L) #max(np.linalg.norm(L),1)
+    L = L / np.linalg.norm(L) #max(np.linalg.norm(L),1)
     # add noise to the diagonal to ensure PSD
     # L = L + np.diag(1e-14*np.ones(len(L)))
     return L
