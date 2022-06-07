@@ -19,10 +19,10 @@ def laplacian(adjacencyMat):
     generates a graph Laplacian
     """ 
     L = np.diag(np.sum(adjacencyMat, axis=1)) - adjacencyMat
-    if np.linalg.norm(L) == 0:
-        L = L / 1
-    else:
-        L = L / np.linalg.norm(L) #max(np.linalg.norm(L),1)
+    # if np.linalg.norm(L) == 0:
+    #     L = L / 1
+    # else:
+    #     L = L / np.linalg.norm(L) #max(np.linalg.norm(L),1)
     # add noise to the diagonal to ensure PSD
     # L = L + np.diag(1e-14*np.ones(len(L)))
     return L
@@ -61,7 +61,7 @@ def AdjacencyFromLinearArray(edgeWgt, num_nodes):
 def constructLaplacian(A):
     D = np.diag(np.sum(A, axis=1))
     L = D-A
-    L = L / np.linalg.norm(L)
+    L = L #/ np.linalg.norm(L)
     return L
 
 def scipyMatMul(x,y):

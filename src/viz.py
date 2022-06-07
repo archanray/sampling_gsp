@@ -13,6 +13,10 @@ def title_corrector(dataset):
         corrected_title = "Grid Graph"
     if dataset == "optimal":
         corrected_title = "Optimal Graph"
+    if dataset == "random":
+        corrected_title = "Random matrix"
+    if dataset == "facebook":
+        corrected_title = "Facebook"
     return corrected_title
 
 def generateGraph(A, signals):
@@ -114,7 +118,7 @@ def seeError(SQ_error_mean, SQ_error_percentile1, SQ_percentile2, dataset, sampl
     plt.savefig(total_path)
     return None 
 
-def seeCombinedError(error, p1, p2, dataset, signal_distro, min_samples, \
+def seeCombinedError(error, p1, p2, dataset, min_samples, \
     max_samples, steps, dataset_size, SQ, name_adder):
     """
     Observe all combined errors
@@ -135,13 +139,14 @@ def seeCombinedError(error, p1, p2, dataset, signal_distro, min_samples, \
     plt.xlabel("Log sampling rate", fontsize=font_size)
     plt.legend(sampling_modes)
 
-    plt.title(title_corrector(dataset)+"- "+"smoothness quotient: "+\
-                   str(float("{:.4f}".format(SQ))))
+    plt.title(title_corrector(dataset)+"- "+"orgnl val: "+\
+                   str(float("{:.3f}".format(SQ))))
 
     # save file
     save_dir = os.path.join("./figures", dataset)
     if not os.path.isdir(save_dir):
         os.makedirs(save_dir)
-    filename = signal_distro+name_adder+".pdf"
+    filename = name_adder+".pdf"
     total_path = os.path.join(save_dir, filename)
     plt.savefig(total_path)
+    plt.close()

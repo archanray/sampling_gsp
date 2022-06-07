@@ -18,11 +18,19 @@ import os
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 #################################################################################
 
+############################# compute  smoothness ###############################
 def computeSmoothness(y, L):
 	return np.squeeze((y.T @ L @ y) / np.linalg.norm(y)**2)
+#################################################################################
+
+########################## compute quadratic forms ##############################
+def computeQF(y, L):
+	return np.squeeze(y.T @ L @ y)
+#################################################################################
 
 signal_distro = "uniform"
 dataset = "grid"
+approximate = "QF"
 # set up torch device
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -79,7 +87,7 @@ if signal_distro != "bi_gaussian":
 	directory = "figures/"+dataset
 	plt.savefig(directory+"/signal_"+signal_distro+".pdf")
 
-# compute smoothness
+# compute 
 original_smoothness = computeSmoothness(y, L.cpu().detach().numpy())
 print("original smoothness:", original_smoothness)
 
